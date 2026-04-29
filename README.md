@@ -4,7 +4,11 @@ If you have used [`android/skills`](https://github.com/android/skills), you alre
 
 ## What this repo is
 
-This is a curated library of Agent Skills focused on Jetpack Compose performance. The skills follow the open Agent Skills standard published at [agentskills.io](https://agentskills.io), the same `SKILL.md` format used by Anthropic's Skills API, Android Studio Agent mode, and Gemini. The library was iterated against Claude Code, where the SKILL.md files load directly; other compatible runtimes have not been individually end to end tested. Note that the [Android CLI](https://developer.android.com/tools/agents/android-cli) itself manages only Google's [first party skill catalog](https://github.com/android/skills) (`android skills add --skill <name>`); this repo is a community library outside that catalog and is loaded by agent runtimes from project local directories rather than installed via the CLI. Every skill is grounded in primary sources: Android Developers documentation, the Compose compiler, posts by Ben Trengrove, Chris Banes, Manuel Vivo, and the skydoves open source projects, and blog posts. Every API reference is pinned to a version.
+This is a curated library of Agent Skills focused on Jetpack Compose performance. Every skill is grounded in primary sources: Android Developers documentation, the Compose compiler, posts by Ben Trengrove, Chris Banes, Manuel Vivo, and the skydoves open source projects, and blog posts. Every API reference is pinned to a version.
+
+The skills follow the open Agent Skills standard published at [agentskills.io](https://agentskills.io), the same `SKILL.md` format used by Anthropic's Skills API, Android Studio Agent mode, and Gemini. The library was iterated against Claude Code, where the SKILL.md files load directly; other compatible runtimes have not been individually end to end tested. 
+
+Note that the [Android CLI](https://developer.android.com/tools/agents/android-cli) itself manages only Google's [first party skill catalog](https://github.com/android/skills) (`android skills add --skill <name>`); this repo is a community library outside that catalog and is loaded by agent runtimes from project local directories rather than installed via the CLI. 
 
 ## What is a Skill
 
