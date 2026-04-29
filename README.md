@@ -43,26 +43,41 @@ The full authoring specification lives in [`docs/SPEC.md`](docs/SPEC.md).
 
 ### Claude Code
 
-Point Claude Code at this repository through its Skills mechanism. Either clone the repo into the project's `.claude/skills/` directory or reference it from a global skills location. Once installed, mention a Compose performance symptom in a prompt and Claude Code matches the trigger vocabulary in the skill frontmatter, then loads the relevant `SKILL.md` automatically.
+Claude Code's skill loader expects each skill at `~/.claude/skills/<slug>/SKILL.md`. This repo organizes its 26 skills under nested category folders (`<category>/<slug>/SKILL.md`) for human readability, so a plain `git clone` into `~/.claude/skills` does not surface the skills (community feedback confirmed). Use the bundled install script, which clones once to a stable location and symlinks each individual skill folder into `~/.claude/skills/`:
 
 ```bash
 git clone https://github.com/skydoves/compose-performance-skills.git \
-  ~/.claude/skills/compose-performance-skills
+  ~/.claude/skills-sources/compose-performance-skills
+
+~/.claude/skills-sources/compose-performance-skills/scripts/install-skills.sh
 ```
+
+The script is idempotent and accepts an optional custom target directory:
+
+```bash
+./scripts/install-skills.sh /path/to/agent/skills      # custom target
+./scripts/install-skills.sh --uninstall                # remove the symlinks
+```
+
+Once the symlinks are in place, restart Claude Code. Mention a Compose performance symptom in a prompt and Claude Code matches the trigger vocabulary in the skill frontmatter, then loads the relevant `SKILL.md` automatically.
 
 ### Android Studio Agent mode and Gemini
 
-These agents discover skills at runtime by scanning project local directories per Google's [Android skills documentation](https://developer.android.com/tools/agents/android-skills). Drop this repo into `.agent/skills/` (or `.skills/`) at the root of the Android project the agent works on:
+These agents discover skills at runtime by scanning project local directories per Google's [Android skills documentation](https://developer.android.com/tools/agents/android-skills). The official Android skill catalog uses a flat layout (`<slug>/SKILL.md` directly under the install directory), and Claude Code follows the same convention. Based on the Claude Code feedback above, expect Android Studio Agent mode and Gemini to require flat layout as well, so use the same install script targeting the project's agent skills directory:
 
 ```bash
 cd <your-android-project>
 git clone https://github.com/skydoves/compose-performance-skills.git \
-  .agent/skills/compose-performance
+  .compose-performance-skills-source
+
+./.compose-performance-skills-source/scripts/install-skills.sh .agent/skills
 ```
 
-Once the directory is present, the agent matches the trigger vocabulary in each skill's frontmatter against the user prompt or the open file. A slow `LazyColumn` should trigger `lists/optimizing-lazy-layouts`, a stability question should trigger `stability/diagnosing-compose-stability`, and so on.
+The script symlinks each `<category>/<slug>/` folder under `.agent/skills/<slug>/` so the agent finds `SKILL.md` at the depth it expects. The source repo lives at `.compose-performance-skills-source/` (gitignore-able) so updates are a single `git pull`.
 
-Caveat. The official Android skill catalog uses a flat layout (`<slug>/SKILL.md` directly under the install directory). This repo uses a nested layout (`<category>/<slug>/SKILL.md`) for organization. Whether Android Studio Agent mode and Gemini recurse into that nested layout has not been independently end to end tested by the author. Reports of working or broken integration are welcome at the [issue tracker](https://github.com/skydoves/compose-performance-skills/issues).
+Once the symlinks are in place, the agent matches the trigger vocabulary in each skill's frontmatter against the user prompt or the open file. A slow `LazyColumn` should trigger `optimizing-lazy-layouts`, a stability question should trigger `diagnosing-compose-stability`, and so on.
+
+End to end behavior with Android Studio Agent mode and Gemini has not been independently verified by the author. Reports of working or broken integration are welcome at the [issue tracker](https://github.com/skydoves/compose-performance-skills/issues).
 
 ### Android CLI
 
