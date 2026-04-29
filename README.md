@@ -4,7 +4,7 @@ If you have used [`android/skills`](https://github.com/android/skills), you alre
 
 ## What this repo is
 
-This is a curated library of Agent Skills focused on Jetpack Compose performance. The skills follow the open Agent Skills standard published at [agentskills.io](https://agentskills.io), which is the same standard Google's [Android CLI](https://developer.android.com/tools/agents/android-cli) and Android Studio Agent mode use for [Android skills](https://developer.android.com/tools/agents/android-skills). Any compliant runtime should load the SKILL.md files in this repo as is. The library was iterated against Claude Code; integration with the Anthropic API, the Android CLI, Android Studio Agent mode, and Gemini follows from standards conformance and has not been individually end to end tested by the author. Every skill is grounded in primary sources: Android Developers documentation, the Compose compiler, posts by Ben Trengrove, Chris Banes, Manuel Vivo, and the skydoves open source projects, and blog posts. Every API reference is pinned to a version.
+This is a curated library of Agent Skills focused on Jetpack Compose performance. The skills follow the open Agent Skills standard published at [agentskills.io](https://agentskills.io), the same `SKILL.md` format used by Anthropic's Skills API, Android Studio Agent mode, and Gemini. The library was iterated against Claude Code, where the SKILL.md files load directly; other compatible runtimes have not been individually end to end tested. Note that the [Android CLI](https://developer.android.com/tools/agents/android-cli) itself manages only Google's [first party skill catalog](https://github.com/android/skills) (`android skills add --skill <name>`); this repo is a community library outside that catalog and is loaded by agent runtimes from project local directories rather than installed via the CLI. Every skill is grounded in primary sources: Android Developers documentation, the Compose compiler, posts by Ben Trengrove, Chris Banes, Manuel Vivo, and the skydoves open source projects, and blog posts. Every API reference is pinned to a version.
 
 ## What is a Skill
 
@@ -46,24 +46,23 @@ git clone https://github.com/skydoves/compose-performance-skills.git \
   ~/.claude/skills/compose-performance-skills
 ```
 
-### Android CLI and Android Studio Agent mode
+### Android Studio Agent mode and Gemini
 
-The [Android CLI](https://developer.android.com/tools/agents/android-cli) and Android Studio Agent mode load any skill that follows the [agentskills.io](https://agentskills.io) open standard, which is what the SKILL.md files in this repo use. The CLI does not accept a remote repository URL: `android skills add --skill <name>` only installs skills from Google's [first party catalog](https://github.com/android/skills). To use this repo with the same agents, drop it into one of the project local directories the agents scan on startup.
-
-Two locations are supported:
-
-- `.skills/` at the repo root of the Android project
-- `.agent/skills/` at the repo root
-
-Clone this repo into one of those directories. Skills coexist with the first party catalog; the two sets do not overlap because this repo is Compose performance only.
+These agents discover skills at runtime by scanning project local directories per Google's [Android skills documentation](https://developer.android.com/tools/agents/android-skills). Drop this repo into `.agent/skills/` (or `.skills/`) at the root of the Android project the agent works on:
 
 ```bash
 cd <your-android-project>
 git clone https://github.com/skydoves/compose-performance-skills.git \
-  .skills/compose-performance
+  .agent/skills/compose-performance
 ```
 
-Once the directory is present, the Android CLI and Android Studio Agent mode match the trigger vocabulary in each skill's frontmatter against the user prompt or the open file. A slow `LazyColumn` triggers `lists/optimizing-lazy-layouts`, a stability question triggers `stability/diagnosing-compose-stability`, and so on. To inspect what Google ships out of the box alongside, run `android skills list` and `android skills add --skill <name>` for the first party skills the developer wants enabled.
+Once the directory is present, the agent matches the trigger vocabulary in each skill's frontmatter against the user prompt or the open file. A slow `LazyColumn` should trigger `lists/optimizing-lazy-layouts`, a stability question should trigger `stability/diagnosing-compose-stability`, and so on.
+
+Caveat. The official Android skill catalog uses a flat layout (`<slug>/SKILL.md` directly under the install directory). This repo uses a nested layout (`<category>/<slug>/SKILL.md`) for organization. Whether Android Studio Agent mode and Gemini recurse into that nested layout has not been independently end to end tested by the author. Reports of working or broken integration are welcome at the [issue tracker](https://github.com/skydoves/compose-performance-skills/issues).
+
+### Android CLI
+
+The [Android CLI](https://developer.android.com/tools/agents/android-cli) manages only Google's first party skill catalog. `android skills add --skill <name>` installs catalog skills such as `r8-analyzer` or `edge-to-edge` into `<project>/skills/<slug>/`. Community libraries such as this repo are outside that catalog and cannot be installed through the CLI; verified by running `android skills list --project=<path>` against a project containing this repo's nested layout, which surfaces only the official catalog. Use the Android CLI for first party skills and the manual clone above for this repo's skills; both sets coexist on the same project.
 
 ### Claude.ai and the Claude API
 
