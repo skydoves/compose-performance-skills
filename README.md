@@ -2,6 +2,14 @@
 
 If you have used [`android/skills`](https://github.com/android/skills), you already know the shape of an Agent Skill: a Markdown file an agent loads on demand to perform one focused task. That library covers Android development at large. This repository goes narrow and deep on a single axis: Jetpack Compose performance. The skills here cover stability, recomposition, lazy layouts, custom modifiers, side effects, baseline profiles, R8, hot reload with Compose HotSwan, and the measurement loop that ties them together. The goal is to give a coding agent enough operational knowledge to diagnose and fix Compose performance issues without guessing, and to give the developer reading the diff a citation trail back to primary sources.
 
+<a href="https://howcomposeworks.com/">
+<img src="https://github.com/user-attachments/assets/0f0f72fc-49ce-48b5-b3dd-f2c04e907f80" width="13%" align="right"/>
+</a>
+
+## 📗 Jetpack Compose Mechanisms Book
+
+[Jetpack Compose Mechanisms](https://howcomposeworks.com/) takes you from "how to use Compose" into "how Compose actually works," tracing the AOSP source line by line through the compiler, runtime, and UI layers beneath every Composable, with practical, production-ready examples from the author's own Compose tooling and libraries. It then ties all three layers together into deep, real-world performance tuning, from stability inference to the skip decision. Fully updated for Kotlin 2.4.0 and Compose Compiler 2.4.0.
+
 ## What this repo is
 
 This is a curated library of Agent Skills focused on Jetpack Compose performance. Every skill is grounded in primary sources: Android Developers documentation, the Compose compiler, posts by Ben Trengrove, Chris Banes, Manuel Vivo, and the skydoves open source projects, and blog posts. Every API reference is pinned to a version.
